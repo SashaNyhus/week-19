@@ -1,0 +1,21 @@
+<html>
+    <head>
+        {% block head %}
+            <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+            <link rel="stylesheet" href="{{url_for('static', filename='styles/main.css')}}">
+            <title>{% block title %}{% endblock %} - Mercer's Animal Hospital</title>
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <img src="{{ url_for('static', filename='logo.webp') }}" alt="">
+            <a class="nav" href="/">Home</a>
+            <h1 class="header-title">Mercer's Animal Hospital for Unusual Maladies</h1>
+            <h1 class="nav">{% block user %}{% endblock %}</h1>
+        </header>
+        <div id="content">{% block content %}{% endblock %}</div>
+        <footer>
+            <a rel="noreferrer noopener" href="https://github.com/SashaVM" target="_blank" >More Code by Sasha</a>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,161 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    background-image: url('/static/blue-background.jpg');
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+header, footer {
+    height: 60px;
+    width: 100%;
+    padding: 10px;
+    background-color: black;
+    color: whitesmoke;
+    position: fixed;
+    display: flex;
+}
+
+header {
+    top: 0;
+}
+
+header > img {
+    height: 35px;
+}
+
+footer {
+    bottom: 0;
+}
+
+footer > a {
+    margin: auto;
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+.nav {
+    padding: 1% 2%;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: whitesmoke;
+    font-size: 1.3em;
+}
+
+.header-title {
+    text-align: center;
+    color: whitesmoke;
+    font-size: 1.7em;
+    margin: 0;
+    font-style: italic;
+}
+
+#content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 70px 30px;
+    min-height: 100vh;
+}
+
+.page-header {
+    width: 100%;
+    color: whitesmoke;
+    text-align: center;
+    font-weight: lighter;
+    font-style: italic;
+    font-size: 2em;
+}
+
+.search-box {
+    margin: -5% auto;
+    height: fit-content;
+    width: fit-content;
+    position: relative;
+}
+
+.search-input {
+    width: 300px;
+    border-radius: 0px;
+    background-color: transparent;
+    border-style: none;
+    border-bottom:1px solid rgba(255,255,255,.5);
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    outline: none;
+    padding-right: 40px;
+}
+
+.search-input::placeholder {
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 100;
+}
+
+.search-button {
+    height: 60px;
+    border-style: none;
+    font-size: 18px;
+    outline: none;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    right: 0px;
+    top: 40px;
+    color: rgba(255,255,255,.5);
+    background-color:transparent;
+}
+
+.result-box {
+    max-width: 40%;
+    min-width: 400px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: whitesmoke;
+}
+
+.result-box > img {
+    height: 150px;
+}
+
+.result-box >img:hover {
+    transform: scale(1.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.result-text {
+    padding: 20px
+}
+
+.result-text > a {
+    display: inline-block;
+    text-decoration: none;
+    height: 35px;
+    padding: .5em;
+    margin: 3px;
+    text-align: center;
+    border-radius: 3px;
+    background-color: black;
+    color: white;
+    
+}
+
+.result-text > a:hover {
+    color: black;
+    background-color: aquamarine;
+}

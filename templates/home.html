@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block user %} Logged in as {{userName}} {% endblock %}
+{% block content %}
+    <h2 class="page-header">{{message}}</h2>
+    <div class="search-box">
+        <!-- <form class="login-form" action="/home/registered" method="POST">
+            <input type="text" class="login-input" id="lastName" name="lastName" placeholder="Last Name" required>
+            <input type="text" class="login-input" id="doctor_id" name="doctor_id" placeholder="Doctor ID" required>
+            <button class="login-button">Log in as Doctor</button>
+        </form>
+        <form class="login-form" action="/home/guest" method="POST">
+            <button class="login-button">Log in as Guest</button>
+        </form> -->
+    </div>
+{% endblock %}
