@@ -11,7 +11,7 @@ def findDataMatch(table, column, searchText, exactMatch):
     if(exactMatch):
         sql = f"SELECT * FROM sasha_mackowiak.{table} WHERE {column}='{searchText}'"
     else:
-        sql = f"SELECT * FROM sasha_mackowiak.{table} WHERE {column}='%{searchText}%'"
+        sql = f"SELECT * FROM sasha_mackowiak.{table} WHERE {column} LIKE '%{searchText}%'"
     return getRows(sql)
 
 
@@ -22,6 +22,7 @@ def getRows(script):
         row = cursor.fetchone()
         if(row == None):
             break
+        # raise Exception(row)
         result.append(row)
     db.close
     return result
