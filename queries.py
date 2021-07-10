@@ -15,6 +15,31 @@ def findDataMatch(table, column, searchText, exactMatch):
     return getRows(sql)
 
 
+def getView(viewName, clearance):
+    data = {}
+    if(viewName == "animal-data"):
+        tableName = "Current Patients"
+        columns = "CONCAT_WS(' ', a.firstName, a.lastName), a.type, a.breed, a.age, a.admitted, CONCAT_WS(', ', d.lastName, d.firstName)"
+        columnNames = ["Name", "Type", "Breed", "Age", "Date Admitted", "Assigned Doctor"]
+        if clearance:
+            columns += (", IF(a.quantum, 'yes', 'no')")
+            columnNames.append("Quantum Abilities")
+        primaryTable = "animals a"
+        innerJoin = "doctors d ON d.doctor_id = a.doctor_id"
+        orderBy = "a.type"
+    sql = f"""
+            SELECT {columns}
+            FROM sasha_mackowiak.{primaryTable}
+            INNER JOIN sasha_mackowiak.{innerJoin}
+            ORDER BY {orderBy}
+        """
+    data["tableName"] = tableName
+    data["columnNames"] = columnNames
+    data["tableRows"] = getRows(sql)
+    return data
+
+
+
 def getRows(script):
     result = []
     cursor.execute(script)

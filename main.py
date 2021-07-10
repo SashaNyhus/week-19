@@ -27,6 +27,12 @@ def main(userType):
         return render_template('home.html', userName=(userData[1]), message=message)
 
 
+@app.route("/data/<view>", methods=['GET'])
+def showTable(view):
+    tableData = queries.getView(view, True)
+    return render_template('data_display.html', userName="Guest", tableData=tableData)
+
+
 def verifyLogin(doctorName, doctorID):
     doctorData = queries.findDataMatch("doctors", "lastName", doctorName, True)
     if (len(doctorData) == 0):
