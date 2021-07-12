@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block user %} Logged in as {{userName}} {% endblock %}
+{% block logbutton %} Log Out {% endblock %}
+{% block bodyClass %} {% if clearance %} class="clearance-background" {% endif %} {% endblock %}
 {% block content %}
     <h2 class="page-header">{{message}}</h2>
     <div class="search-box">

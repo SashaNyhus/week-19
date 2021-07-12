@@ -14,6 +14,10 @@ body {
     background-size: cover;
 }
 
+.clearance-background {
+    background-image: url('/static/orange-background.jpg');
+}
+
 header, footer {
     height: 60px;
     width: 100%;
