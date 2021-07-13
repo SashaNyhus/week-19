@@ -41,6 +41,7 @@ def getView(viewName, clearance):
 
 
 def getRows(script):
+    cursor = db.cursor()
     result = []
     cursor.execute(script)
     while(True):
