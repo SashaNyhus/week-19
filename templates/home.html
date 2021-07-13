@@ -5,6 +5,14 @@
 {% block bodyClass %} {% if clearance %} class="clearance-background" {% endif %} {% endblock %}
 {% block content %}
     <h2 class="page-header">{{message}}</h2>
+    <div>
+        <a href="/data/animal-data">See patient list</a>
+        <a href="/data/doctor-data">See staff list</a>
+        <a href="/data/malady-data">See malady list</a>
+        {% if clearance %}
+            <a href="/data/hero-data">See heroes list</a>
+        {% endif %}
+    </div>
     <div class="search-box">
         <!-- <form class="login-form" action="/home/registered" method="POST">
             <input type="text" class="login-input" id="lastName" name="lastName" placeholder="Last Name" required>

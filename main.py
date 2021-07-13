@@ -56,8 +56,14 @@ def goHome():
 
 @app.route("/data/<view>", methods=['GET'])
 def showTable(view):
-    tableData = queries.getView(view, True)
-    return render_template('data_display.html', userName="Guest", tableData=tableData)
+    if 'clearance' in session:
+        doctorClearance = session['clearance']
+    else:
+        doctorClearance = False
+    tableData = queries.getView(view, doctorClearance)
+    if(tableData == None):
+        return render_template('home.html', userName=(session['userName']), clearance=doctorClearance, message="Requested Data not found")
+    return render_template('data_display.html', userName=(session['userName']), tableData=tableData)
 
 
 def verifyLogin(doctorName, doctorID):
