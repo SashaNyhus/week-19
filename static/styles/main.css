@@ -68,6 +68,7 @@ footer > a {
     justify-content: space-around;
     padding: 70px 30px;
     min-height: 100vh;
+    overflow: auto;
 }
 
 .page-header {
@@ -79,45 +80,11 @@ footer > a {
     font-size: 2em;
 }
 
-.search-box {
-    margin: -5% auto;
-    height: fit-content;
-    width: fit-content;
-    position: relative;
-}
-
-.search-input {
-    width: 300px;
-    border-radius: 0px;
-    background-color: transparent;
-    border-style: none;
-    border-bottom:1px solid rgba(255,255,255,.5);
-    color: white;
-    padding: 10px;
-    font-size: 18px;
-    letter-spacing: 2px;
-    outline: none;
-    padding-right: 40px;
-}
-
-.search-input::placeholder {
-    font-size: 18px;
-    letter-spacing: 2px;
-    font-weight: 100;
-}
-
-.search-button {
-    height: 60px;
-    border-style: none;
-    font-size: 18px;
-    outline: none;
-    cursor: pointer;
-    border-radius: 50%;
-    position: absolute;
-    right: 0px;
-    top: 40px;
-    color: rgba(255,255,255,.5);
-    background-color:transparent;
+.new-entry-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .result-box {

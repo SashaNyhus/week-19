@@ -1,0 +1,9 @@
+{% extends "home.html" %}
+{% block title %} Search Data {% endblock %}
+{% block user %} Logged in as {{userName}} {% endblock %}
+{% block content %}
+<form action="/search-results">
+    <input type="text" name="query" id="query" required>
+    <button>GO</button>
+</form>
+{% endblock %}

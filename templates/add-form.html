@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block user %} Logged in as {{userName}} {% endblock %}
+{% block logbutton %} Log Out {% endblock %}
+{% block bodyClass %} {% if clearance %} class="clearance-background" {% endif %} {% endblock %}
+{% block content %}
+<h1>Add a new {{entryType}} to the database</h1>
+<form class="new-entry-form" action="/add/{{entryType}}" method="POST">
+    {% if entryType == 'animal' %}
+        <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+        <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+        <input type="text" id="type" name="type" placeholder="Animal Type" required>
+        <input type="text" id="breed" name="breed" placeholder="Animal Breed">
+        <label for="age">Animal Age</label>
+        <input type="number" id="age" name="age">
+        <label for="admitted">Date Admitted</label>
+        <input type="date" id="admitted" name="admitted">
+        <label for="doctor_id">Assigned Doctor</label>
+        <select name="doctor_id" id="doctor_id" required>
+            {% for row in idData['doctors'] %}
+            <option value={{row[0]}}>{{row[1]}}</option>
+            {% endfor %}
+        </select>
+        <label for="malady_id">Malady</label>
+        <select name="malady_id" id="malady_id">
+            {% for row in idData['maladies'] %}
+            <option value={{row[0]}}>{{row[1]}}</option>
+            {% endfor %}
+        </select>
+        {% if clearance %}
+            <label for="quantum">Quantum Powered?</label>
+            <input type="checkbox" id="quantum" name="quantum" value="True">
+            <input type="text" id="alias" name="alias" placeholder="Alias">
+            <label for="power_id">Quantum Power</label>
+            <select name="power_id" id="power_id">
+                {% for row in idData['quantum_powers'] %}
+                <option value={{row[0]}}>{{row[1]}}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+    {% elif entryType == 'doctor' %}
+        <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+        <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+        <input type="text" id="specialty" name="specialty" placeholder="specialty">
+        {% if clearance %}
+            <label for="quantum_clearance">Quantum Clearance?</label>
+            <input type="checkbox" id="quantum_clearance" name="quantum_clearance" value="True">
+            <label for="quantum">Quantum Powered?</label>
+            <input type="checkbox" id="quantum" name="quantum" value="True">
+            <input type="text" id="alias" name="alias" placeholder="Alias">
+            <label for="power_id">Quantum Power</label>
+            <select name="power_id" id="power_id">
+                {% for row in idData['quantum_powers'] %}
+                <option value={{row[0]}}>{{row[1]}}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+    {% elif entryType == 'malady' %}
+        <input type="text" id="name" name="name" placeholder="Malady Name" required>
+        <textarea name="description" id="description" cols="30" rows="10" maxlength="255" placeholder="Description"></textarea>
+        <label for="animal_id">Afflicted Animal</label>
+        <select name="animal_id" id="animal_id">
+            {% for row in idData['animals'] %}
+            <option value={{row[0]}}>{{row[1]}}</option>
+            {% endfor %}
+        </select>
+    {% elif entryType == 'power' %}
+        <input type="text" id="name" name="name" placeholder="Power Name" required>
+        <textarea name="description" id="description" cols="30" rows="10" maxlength="255" placeholder="Description"></textarea>
+        <label for="animal_id">Animal Exhibiting Power</label>
+        <select name="animal_id" id="animal_id">
+            {% for row in idData['animals'] %}
+            <option value={{row[0]}}>{{row[1]}}</option>
+            {% endfor %}
+        </select>
+        <label for="doctor_id">Doctor Exhibiting Power</label>
+        <select name="doctor_id" id="doctor_id" required>
+            {% for row in idData['doctors'] %}
+            <option value={{row[0]}}>{{row[1]}}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
+    <button>Submit</button>
+</form>
+{% endblock %}

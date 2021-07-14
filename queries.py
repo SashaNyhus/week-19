@@ -20,18 +20,20 @@ def getView(viewName, clearance):
     union = {}
     if(viewName == "animal-data"):
         tableName = "Current Patients"
-        columns = "CONCAT_WS(' ', a.firstName, a.lastName), a.type, a.breed, a.age, a.admitted, CONCAT_WS(', ', d.lastName, d.firstName)"
-        columnNames = ["Name", "Type", "Breed", "Age", "Date Admitted", "Assigned Doctor"]
+        columns = "a.animal_id, CONCAT_WS(' ', a.firstName, a.lastName), a.type, a.breed, a.age, a.admitted, CONCAT_WS(', ', d.lastName, d.firstName)"
+        columnNames = ["ID", "Name", "Type", "Breed", "Age", "Date Admitted", "Assigned Doctor"]
         if clearance:
             columns += (", IF(a.quantum, 'yes', 'no')")
             columnNames.append("Quantum Abilities")
         primaryTable = "animals a"
         innerJoin = "doctors d ON d.doctor_id = a.doctor_id"
         orderGroupBy = "ORDER BY a.type"
+        data['realName'] = "animals"
+        data['realID'] = "animal_id"
     elif(viewName == "doctor-data"):
         tableName = "Hospital Staff"
-        columns = "CONCAT_WS(', ', d.lastName, d.firstName) `name`, d.specialty, COUNT(*)"
-        columnNames = ["Name", "Specialty", "Assigned Patients"]
+        columns = "d.doctor_id, CONCAT_WS(', ', d.lastName, d.firstName) `name`, d.specialty, COUNT(*)"
+        columnNames = ["ID", "Name", "Specialty", "Assigned Patients"]
         if clearance:
             columns += (", IF(d.quantum_clearance, 'yes', 'no'), IF(d.quantum, 'yes', 'no'), d.alias")
             columnNames.extend(["Quantum Clearance", "Quantum Powers", "Alias"])
@@ -39,6 +41,8 @@ def getView(viewName, clearance):
         innerJoin = "animals a ON d.doctor_id = a.doctor_id"
         orderGroupBy = """GROUP BY `name` 
                             ORDER BY `name`"""
+        data['realName'] = "doctors"
+        data['realID'] = "doctor_id"
     elif(viewName == "hero-data"):
         if(clearance == False):
             return None
@@ -84,6 +88,99 @@ def getView(viewName, clearance):
     data["tableRows"] = getRows(sql)
     return data
 
+
+def getIDData(tablesArray, clearance):
+    dataDict = {}
+    for tableName in tablesArray:
+        if(tableName == "doctors"):
+            columns = "doctor_id, CONCAT_WS(' ', firstName, lastName)"
+        elif(tableName == "animals"):
+            columns = "animal_id, CONCAT_WS(' ', firstName, lastName)"
+        elif(tableName == "maladies"):
+            columns = "malady_id, name"
+        elif(clearance == False):
+            continue
+        elif(tableName == "quantum_powers"):
+            columns = "power_id, name"
+        else:
+            continue
+        sql = f"SELECT {columns} FROM sasha_mackowiak.{tableName}"
+        dataDict[tableName] = getRows(sql)
+    return dataDict
+
+
+def deleteRow(table, column, columnMatch, name):
+    sql = f"DELETE FROM sasha_mackowiak.{table} WHERE {column}='{columnMatch}'"
+    cursor = db.cursor()
+    cursor.execute(sql)
+    db.commit()
+    db.close
+    return f"Deleted {name} from {table}"
+
+
+def addRow(rowType, data):
+    if(rowType == "animal"):
+        animalData = {}
+        animalData['columns'] = "firstName, lastName, type, doctor_id"
+        animalData['values'] = f"'{data['firstName']}', '{data['lastName']}', '{data['type']}', {data['doctor_id']}"
+        if(data['quantum']):
+            animalData['columns'] += ", quantum"
+            animalData['values'] += f", {data['quantum']}"
+        animalData = addValueIfPresent('breed', animalData, data)
+        animalData = addValueIfPresent('age', animalData, data)
+        animalData = addValueIfPresent('admitted', animalData, data)
+        animalData = addValueIfPresent('alias', animalData, data)
+        newAnimalID = sendRowData("animals", animalData['columns'], animalData['values'])
+        if 'malady_id' in data:
+            maladyColumns = "animal_id, malady_id"
+            maladyValues = f"{newAnimalID}, {data['malady_id']}"
+            sendRowData("animal_maladies", maladyColumns, maladyValues)
+        if 'quantum_id' in data:
+            quantumColumns = "animal_id, power_id"
+            quantumValues = f"{newAnimalID}, {data['quantum_id']}"
+            sendRowData("animal_powers", quantumColumns, quantumValues)
+    return
+
+
+def getNewID():
+    script = "SELECT LAST_INSERT_ID()"
+    db = pymysql.connect(
+        host="freetrainer.cryiqqx3x1ub.us-west-2.rds.amazonaws.com",
+        user="sasha",
+        password=secret.password
+    )
+    cursor = db.cursor()
+    cursor.execute(script)
+    result = cursor.fetchone()
+    db.close()
+    return result[0]
+
+
+
+def addValueIfPresent(valueName, currentStrings, dataDict):
+    if dataDict[valueName]:
+        currentStrings['columns'] += f", {valueName}"
+        currentStrings['values'] += f", '{dataDict[valueName]}'"
+    return currentStrings
+
+
+def sendRowData(tableName, columnString, valueString):
+    script = f"INSERT INTO sasha_mackowiak.{tableName}({columnString}) VALUES ({valueString})"
+    # if tableName == "animal_maladies":
+    #     raise Exception(script)
+    db = pymysql.connect(
+        host="freetrainer.cryiqqx3x1ub.us-west-2.rds.amazonaws.com",
+        user="sasha",
+        password=secret.password
+    )
+    cursor = db.cursor()
+    cursor.execute(script)
+    db.commit()
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    db.commit()
+    result = cursor.fetchone()
+    db.close()
+    return result[0]
 
 
 def getRows(script):

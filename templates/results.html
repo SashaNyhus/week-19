@@ -1,0 +1,26 @@
+{% extends "home.html" %}
+{% block title %} Search Results {% endblock %}
+{% block user %} Logged in as {{userName}} {% endblock %}
+{% block content %}
+    <h1>{{message}}</h1>
+    {% if 'doctors' in results %}
+        <h2>Found the following doctors:</h2>
+        {% for data in results['doctors'] %}
+            {% for row in data %}
+                <p>{{row[1]}} {{row[2]}}, specialty: {{row[3]}} </p>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    {% if 'animals' in results %}
+        <h2>Found the following animals:</h2>
+        {% for row in results['animals'] %}
+        <p>{{row[1]}} {{row[2]}}, {{row[3]}} ({{row[4]}})</p>
+        {% endfor %}
+    {% endif %}
+    {% if 'maladies' in results %}
+        <h2>Found the following maladies:</h2>
+        {% for row in results['maladies'] %}
+        <p>{{row[1]}}: {{row[2]}}</p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

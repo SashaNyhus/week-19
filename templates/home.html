@@ -9,18 +9,17 @@
         <a href="/data/animal-data">See patient list</a>
         <a href="/data/doctor-data">See staff list</a>
         <a href="/data/malady-data">See malady list</a>
+        <a href="/search">Search database</a>
         {% if clearance %}
             <a href="/data/hero-data">See heroes list</a>
         {% endif %}
     </div>
-    <div class="search-box">
-        <!-- <form class="login-form" action="/home/registered" method="POST">
-            <input type="text" class="login-input" id="lastName" name="lastName" placeholder="Last Name" required>
-            <input type="text" class="login-input" id="doctor_id" name="doctor_id" placeholder="Doctor ID" required>
-            <button class="login-button">Log in as Doctor</button>
-        </form>
-        <form class="login-form" action="/home/guest" method="POST">
-            <button class="login-button">Log in as Guest</button>
-        </form> -->
+    <div>
+        <a href="/new/animal">Add Patient to Records</a>
+        <a href="/new/doctor">Add Doctor to Records</a>
+        <a href="/new/malady">Add a Malady to Records</a>
+        {% if clearance %}
+            <a href="/new/power">Add a Quantum Power to Records</a>
+        {% endif %}
     </div>
 {% endblock %}
