@@ -70,15 +70,19 @@ def showSearch():
     return render_template('search.html', userName=(session['userName']), clearance=(session['clearance']))
 
 
-@app.route("/search-results")
+@app.route("/search-results", methods=['POST'])
 def showResults():
     results = {}
     query = request.form.get('query')
     results['doctors'] = queries.findDataMatch("doctors", "lastName", query, False)
+    # raise Exception(results['doctors'])
     results['doctors'].extend(queries.findDataMatch("doctors", "firstName", query, False))
     results['animals'] = queries.findDataMatch("animals", "lastName", query, False)
     results['animals'].extend(queries.findDataMatch("animals", "firstName", query, False))
     results['maladies'] = queries.findDataMatch("maladies", "name", query, False)
+    results['maladies'].extend(queries.findDataMatch("maladies", "description", query, False))
+    results['powers'] = queries.findDataMatch("quantum_powers", "name", query, False)
+    results['powers'].extend(queries.findDataMatch("quantum_powers", "description", query, False))
     if results:
         message = "found these results"
     else:

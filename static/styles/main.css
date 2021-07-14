@@ -46,6 +46,10 @@ footer > a {
     text-decoration: none;
 }
 
+td, th {
+    text-align: left;
+}
+
 .nav {
     padding: 1% 2%;
     text-decoration: none;
@@ -64,8 +68,9 @@ footer > a {
 
 #content {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    /* flex-wrap: wrap; */
+    flex-direction: column;
+    justify-content: flex-start;
     padding: 70px 30px;
     min-height: 100vh;
     overflow: auto;

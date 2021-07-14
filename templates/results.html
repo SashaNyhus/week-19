@@ -3,24 +3,68 @@
 {% block user %} Logged in as {{userName}} {% endblock %}
 {% block content %}
     <h1>{{message}}</h1>
-    {% if 'doctors' in results %}
+    {% if results['doctors'] %}
         <h2>Found the following doctors:</h2>
-        {% for data in results['doctors'] %}
-            {% for row in data %}
-                <p>{{row[1]}} {{row[2]}}, specialty: {{row[3]}} </p>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Specialty</th>
+            </tr>
+            {% for row in results['doctors'] %}
+                <tr>
+                    <td>{{row[1]}} {{row[2]}}</td>
+                    <td>{{row[3]}}</td>
+                </tr>
             {% endfor %}
-        {% endfor %}
+        </table>
     {% endif %}
-    {% if 'animals' in results %}
+    {% if results['animals'] %}
         <h2>Found the following animals:</h2>
-        {% for row in results['animals'] %}
-        <p>{{row[1]}} {{row[2]}}, {{row[3]}} ({{row[4]}})</p>
-        {% endfor %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Breed</th>
+            </tr>
+            {% for row in results['animals'] %}
+            <tr>
+                <td>{{row[1]}} {{row[2]}}</td>
+                <td>{{row[3]}}</td>
+                <td>{{row[4]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
     {% endif %}
-    {% if 'maladies' in results %}
+    {% if results['maladies'] %}
         <h2>Found the following maladies:</h2>
-        {% for row in results['maladies'] %}
-        <p>{{row[1]}}: {{row[2]}}</p>
-        {% endfor %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            {% for row in results['maladies'] %}
+            <tr>
+                <td>{{row[1]}}</td>
+                <td>{{row[2]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if clearance %}
+        {% if results['powers'] %}
+        <h2>Found the following quantum powers:</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            {% for row in results['powers'] %}
+            <tr>
+                <td>{{row[1]}}</td>
+                <td>{{row[2]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
     {% endif %}
 {% endblock %}
