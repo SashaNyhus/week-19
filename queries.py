@@ -135,26 +135,54 @@ def addRow(rowType, data):
             maladyColumns = "animal_id, malady_id"
             maladyValues = f"{newAnimalID}, {data['malady_id']}"
             sendRowData("animal_maladies", maladyColumns, maladyValues)
-        if 'quantum_id' in data:
+        if 'power_id' in data:
             quantumColumns = "animal_id, power_id"
-            quantumValues = f"{newAnimalID}, {data['quantum_id']}"
+            quantumValues = f"{newAnimalID}, {data['power_id']}"
             sendRowData("animal_powers", quantumColumns, quantumValues)
+    elif(rowType == "doctor"):
+        doctorData = {}
+        doctorData['columns'] = "firstName, lastName, quantum_clearance"
+        doctorData['values'] = f"'{data['firstName']}', '{data['lastName']}'"
+        if(data['quantum_clearance']):
+            doctorData['values'] += f", True"
+        else:
+            doctorData['values'] += f", False"
+        if(data['quantum']):
+            doctorData['columns'] += ", quantum"
+            doctorData['values'] += f", {data['quantum']}"
+        doctorData = addValueIfPresent('specialty', doctorData, data)
+        doctorData = addValueIfPresent('alias', doctorData, data)
+        doctorData = addValueIfPresent('power_id', doctorData, data)
+        newDoctorID = sendRowData("doctors", doctorData['columns'], doctorData['values'])
+        if 'power_id' in data:
+            quantumColumns = "doctor_id, power_id"
+            quantumValues = f"{newDoctorID}, {data['power_id']}"
+            sendRowData("animal_powers", quantumColumns, quantumValues)
+    elif(rowType == "malady"):
+        maladyData = {}
+        maladyData['columns'] = "name"
+        maladyData['values'] = f"'{data['name']}'"
+        maladyData = addValueIfPresent('description', maladyData, data)
+        newMaladyID = sendRowData(maladies, maladyData['columns'], maladyData['values'])
+        if 'animal_id' in data:
+            maladyColumns = "animal_id, malady_id"
+            maladyValues = f"{data['animal_id']}, {newMaladyID}"
+            sendRowData("animal_maladies", maladyColumns, maladyValues)
+    elif(rowType == "power"):
+        powerData = {}
+        powerData['columns'] = "name"
+        powerData['values'] = f"'{data['name']}'"
+        powerData = addValueIfPresent('description', powerData, data)
+        newPowerID = sendRowData('quantum_powers', powerData['columns'], powerData['values'])
+        if 'animal_id' in data:
+            animalColumns = "animal_id, power_id"
+            animalValues = f"{data['animal_id']}, {newPowerID}"
+            sendRowData("animal_powers", animalColumns, animalValues)
+        if 'doctor_id' in data:
+            doctorColumns = "doctor_id, power_id"
+            doctorValues = f"{data['doctor_id']}, {newPowerID}"
+            sendRowData("doctor_powers", doctorColumns, doctorValues)
     return
-
-
-def getNewID():
-    script = "SELECT LAST_INSERT_ID()"
-    db = pymysql.connect(
-        host="freetrainer.cryiqqx3x1ub.us-west-2.rds.amazonaws.com",
-        user="sasha",
-        password=secret.password
-    )
-    cursor = db.cursor()
-    cursor.execute(script)
-    result = cursor.fetchone()
-    db.close()
-    return result[0]
-
 
 
 def addValueIfPresent(valueName, currentStrings, dataDict):
@@ -166,7 +194,7 @@ def addValueIfPresent(valueName, currentStrings, dataDict):
 
 def sendRowData(tableName, columnString, valueString):
     script = f"INSERT INTO sasha_mackowiak.{tableName}({columnString}) VALUES ({valueString})"
-    # if tableName == "animal_maladies":
+    # if tableName == "quantum_powers":
     #     raise Exception(script)
     db = pymysql.connect(
         host="freetrainer.cryiqqx3x1ub.us-west-2.rds.amazonaws.com",
