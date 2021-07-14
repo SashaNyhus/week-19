@@ -1,0 +1,28 @@
+{% extends "home.html" %}
+{% block title %} Editing Data for {{existingRow[1]}} {% endblock %}
+{% block user %} Logged in as {{userName}} {% endblock %}
+{% block content %}
+<form action="/change/{{table}}/{{columnName}}/{{existingRow[0]}}" method="POST">
+    {% if table == "animals" %}
+        <input type="text" id="firstName" name="firstName" placeholder="First Name" required value={{existingRow[1]}}>
+        <input type="text" id="lastName" name="lastName" placeholder="Last Name" required value={{existingRow[2]}}>
+        <input type="text" id="type" name="type" placeholder="Animal Type" required value={{existingRow[3]}}>
+        <input type="text" id="breed" name="breed" placeholder="Animal Breed" value={{existingRow[4]}}>
+        <label for="age" >Animal Age</label>
+        <input type="number" id="age" name="age" value={{existingRow[5]}}>
+        <label for="admitted">Date Admitted</label>
+        <input type="date" id="admitted" name="admitted" value={{existingRow[6]}}>
+        <label for="doctor_id">Assigned Doctor</label>
+        <select name="doctor_id" id="doctor_id" required value={{existingRow[7]}}>
+            {% for row in idData['doctors'] %}
+            <option value={{row[0]}}>{{row[1]}}</option>
+            {% endfor %}
+        </select>
+    {% elif table == 'doctors' %}
+        <input type="text" id="firstName" name="firstName" placeholder="First Name" required value={{existingRow[1]}}>
+        <input type="text" id="lastName" name="lastName" placeholder="Last Name" required value={{existingRow[2]}}>
+        <input type="text" id="specialty" name="specialty" placeholder="specialty" value={{existingRow[3]}}>
+    {% endif %}
+    <button>Submit Changes</button>
+</form>
+{% endblock %}

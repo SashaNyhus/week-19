@@ -95,6 +95,21 @@ def deleteData(table, columName, rowID, displayName):
     message = queries.deleteRow(table, columName, rowID, displayName)
     return render_template('home.html', userName=session['userName'], message=message, clearance=session['clearance'])
 
+
+@app.route("/update/<table>/<columnName>/<rowID>")
+def updateData(table, columnName, rowID):
+    existingRow = queries.findDataMatch(table, columnName, rowID, True)[0]
+    idData = queries.getIDData(["animals", "doctors", "maladies", "quantum_powers"], session['clearance'])
+    message = "Edit any fields you want to change, then submit"
+    return render_template('update.html', existingRow=existingRow, idData=idData, table=table, columnName=columnName, userName=session['userName'], message=message, clearance=session['clearance'])
+
+@app.route("/change/<table>/<columnName>/<rowID>", methods=['POST'])
+def sendDataUpdate(table, columnName, rowID):
+    updatedData = request.form
+    queries.changeRow(table, columnName, rowID, updatedData)
+    message = f"Updated {table}"
+    return render_template('home.html', userName=session['userName'], message=message, clearance=session['clearance'])
+
 @app.route("/new/<entryType>")
 def showAddForm(entryType):
     idData = queries.getIDData(["animals", "doctors", "maladies", "quantum_powers"], session['clearance'])
@@ -104,8 +119,6 @@ def showAddForm(entryType):
 @app.route("/add/<entryType>", methods=['POST'])
 def addEntry(entryType):
     entryData = request.form
-    print("TEST HERE")
-    print(entryData)
     queries.addRow(entryType, entryData)
     message = f"Added {entryType} to records"
     return render_template('home.html', userName=session['userName'], message=message, clearance=session['clearance'])

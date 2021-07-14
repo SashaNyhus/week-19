@@ -211,6 +211,32 @@ def sendRowData(tableName, columnString, valueString):
     return result[0]
 
 
+def changeRow(tableName, keyColumn, rowKey, newData):
+    columnsList = newData.keys()
+    columns = ", ".join(columnsList)
+    valuesList = newData.values()
+    values = "', '".join(valuesList)
+    values = f"'{values}'"
+    updatesList = []
+    for name in columnsList:
+        updatesList.append(f"{name} = '{newData[name]}'")
+    updatesList = ", ".join(updatesList)
+    sql = f"""INSERT INTO sasha_mackowiak.{tableName}({columns}, {keyColumn})
+                VALUES ({values}, {rowKey}) 
+                ON DUPLICATE KEY UPDATE {updatesList}"""
+    # raise Exception(sql)
+    db = pymysql.connect(
+        host="freetrainer.cryiqqx3x1ub.us-west-2.rds.amazonaws.com",
+        user="sasha",
+        password=secret.password
+    )
+    cursor = db.cursor()
+    cursor.execute(sql)
+    db.commit()
+    db.close
+    return
+
+
 def getRows(script):
     cursor = db.cursor()
     result = []
